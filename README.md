@@ -1,80 +1,76 @@
 # Vanderbilt dissertation — Eleventy + Pandoc
 
-One set of Markdown chapters produces:
+Write your dissertation once in Markdown and get two outputs:
 
-| Output | Tool | Command |
-|---|---|---|
-| Website (interactive demos, KaTeX, APA citations) | Eleventy 3 | `npm start` / `npm run build` → `_site/` |
-| PDF in the official [Vanderbilt 2026 LaTeX template](https://www.overleaf.com/latex/templates/vanderbilt-university-dissertation-template-2026/bpfmrtczfgwj) | pandoc → LaTeX → latexmk | `npm run pdf` → `build/thesis.pdf` |
-| `.tex` (e.g. for Overleaf, together with `export/latex/*.sty`) | pandoc | `npm run tex` → `build/thesis.tex` |
+- **A website** (Eleventy) with citations, KaTeX math, figures and interactive JavaScript demos.
+- **A PDF** in the official [Vanderbilt 2026 LaTeX template](https://www.overleaf.com/latex/templates/vanderbilt-university-dissertation-template-2026/bpfmrtczfgwj), built with pandoc and LaTeX.
 
-Requirements: Node 20+, pandoc 3.2+, a TeX distribution with `latexmk`, and `rsvg-convert` (`brew install librsvg`) for SVG figures.
+## Installation
 
-## How the PDF matches the template
+You need Node.js 20+, pandoc 3.2+, a TeX distribution that includes `latexmk`, and `rsvg-convert`. On macOS:
 
-`export/latex/vanderbilt.latex` uses the Graduate School's preamble, title page, copyright,
-dedication and acknowledgments pages, front-matter sequence, spacing and pagination
-**verbatim**. `sfchap.sty` and `sfsection.sty` are copied unchanged. Only your text comes from
-`content/_data/thesis.yaml`. The Lua filter writes figures (`[h]`, `\centering`, caption below),
-tables (`[b]`, `\scriptsize`, `tabularx` at `0.6\textwidth`, booktabs) and underlines exactly the way
-the template's sample chapters do.
-
-To verify this, the template's own sample content was run through this pipeline and compared with the
-original compiled PDF at 100 dpi. 14 of 15 pages were pixel-identical. The remaining page differs only in
-the kerning of one pair of curly quotes that were typed directly in the original source.
-
-Per-element overrides: `{placement="t"}` on a figure, `{#tbl:x placement=h width=0.9\textwidth}` in a
-table caption.
-
-## Layout
-
-```
-content/
-  _data/thesis.yaml        title, name, major, date, committee, optional pages (shared by 11ty + pandoc)
-  chapters/01-*.md ...     chapters in Pandoc Markdown, in filename order. Front matter: just `title:`
-  references.bib           BibTeX library (PDF: natbib + apalike, as in the template)
-  figures/                 images (SVG/PNG/JPG); reference as /figures/x.svg
-  demos/                   JS for interactive demos
-  _includes/, assets/      web layouts + CSS (deliberately minimal)
-export/
-  latex/vanderbilt.latex   pandoc template = the Vanderbilt template + placeholders
-  latex/sfchap.sty, sfsection.sty   unchanged from the template
-  apa.csl                  APA 7 for web citations
-  filters/web-to-print.lua demos → static figures, template-style figures/tables, SVG → PDF
-scripts/export.js          joins the chapters and runs pandoc and latexmk
+```bash
+brew install node pandoc librsvg
+brew install --cask mactex-no-gui
 ```
 
-## Writing syntax (works in every output)
+Then install the project's dependencies:
+
+```bash
+npm install
+```
+
+## Usage
+
+| Command | What it does |
+|---|---|
+| `npm start` | Live preview of the website at http://localhost:8080 |
+| `npm run build` | Builds the static website into `_site/` |
+| `npm run pdf` | Builds the dissertation PDF at `build/thesis.pdf` |
+| `npm run tex` | Writes `build/thesis.tex` only (for Overleaf, upload it together with `export/latex/*.sty`) |
+
+### Where things go
+
+| File | Contents |
+|---|---|
+| `content/_data/thesis.yaml` | Title, name, major, date, committee, and the optional copyright, dedication and acknowledgments pages |
+| `content/chapters/NN-name.md` | One file per chapter, in filename order. Front matter is just `title:`, and sections start at `##`. |
+| `content/references.bib` | BibTeX library |
+| `content/figures/` | Images (SVG, PNG or JPG). SVGs are converted to PDF for print automatically. |
+| `content/demos/` | JavaScript for the interactive demos |
+
+### Markdown syntax
+
+The same syntax works on the website and in the PDF:
 
 ```markdown
-Citation [@knuth1984] or several [@a; @b].
+Citation [@knuth1984], or several [@a; @b].
 
-Inline $E=mc^2$, display:
+Inline math $E=mc^2$, or display math:
 $$ \hat\beta = (X^\top X)^{-1} X^\top y $$
 
-![Caption text, may contain $x$.](/figures/plot.svg){#fig:plot width=70%}
+![Caption, may contain $x$.](/figures/plot.svg){#fig:plot width=70%}
 
-| a | b |
-|---|---|
-| 1 | 2 |
+| Model | Accuracy |
+|:------|---------:|
+| Ours  |     0.89 |
 
 : Table caption. {#tbl:results}
 
-Footnote.[^1]
-
-[^1]: Text.
-
-::: {.demo #fig:sine fallback="/figures/sine.png" caption="Caption for both outputs."}
-<canvas id="c"></canvas>
-<script type="module" src="/demos/sine.js"></script>
+::: {.demo fallback="/figures/plot.svg" caption="Shown on the web as a live demo, in the PDF as the fallback image."}
+<div id="my-demo"></div>
+<script type="module" src="/demos/my-demo.js"></script>
 :::
 ```
 
-In the PDF, a `demo` block becomes a figure that uses the `fallback` image and adds a note pointing readers to `site-url`.
+## About the PDF
 
-## Known limitations / next steps
+`export/latex/vanderbilt.latex` contains the Graduate School's template verbatim (preamble, title page, preliminary pages, spacing and pagination), and `sfchap.sty` and `sfsection.sty` are copied unchanged. When the template's own sample content is built with this pipeline, 14 of the 15 pages are pixel-identical to the original PDF.
 
-- Citations on the web only support plain keys (`[@key]`). They don't support locators or prefixes like `[see @key, p. 3]`; pandoc does, in the PDF.
-- Cross-references such as `@fig:plot` aren't wired up yet (pandoc-crossref + a markdown-it plugin).
-- The List of Abbreviations (`nomencl`) stays commented out, as it is in the template.
-- Tables with merged cells fall back to pandoc's `longtable`, which doesn't match the template's table style.
+Figures default to `[h]` placement and tables to `[b]`, as in the template. To change this, add `{placement="t"}` to a figure, or `placement=t` to a table's caption attributes.
+
+## Limitations
+
+- Website citations support plain keys only. Locators and prefixes such as `[see @key, p. 3]` work in the PDF but not on the website.
+- Cross-references such as `@fig:plot` aren't supported yet.
+- Tables with merged cells use pandoc's default table style, which doesn't match the template.
