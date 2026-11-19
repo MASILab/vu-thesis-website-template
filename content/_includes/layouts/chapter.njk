@@ -1,0 +1,24 @@
+---
+layout: layouts/base.njk
+---
+{%- set idx = 0 -%}
+{%- for ch in collections.chapters -%}{%- if ch.url == page.url -%}{%- set idx = loop.index -%}{%- endif -%}{%- endfor -%}
+<article class="chapter" style="--chapter: {{ idx }}">
+	<h1><span class="chapter-num">Chapter {{ idx }}</span> {{ title }}</h1>
+
+	{{ content | citations | safe }}
+
+	{% if references and references.length %}
+	<section class="references">
+		<h2 class="unnumbered">References</h2>
+		{% include "references.njk" %}
+	</section>
+	{% endif %}
+</article>
+
+<nav class="chapter-nav">
+	{% set prev = collections.chapters | getPreviousCollectionItem %}
+	{% set next = collections.chapters | getNextCollectionItem %}
+	{% if prev %}<a rel="prev" href="{{ prev.url }}">← {{ prev.data.title }}</a>{% endif %}
+	{% if next %}<a rel="next" href="{{ next.url }}">{{ next.data.title }} →</a>{% endif %}
+</nav>

@@ -1,0 +1,5 @@
+<ol class="bibliography">
+	{% for reference in references %}
+	<li id="bib-{{ reference.id }}"{{ ' class=missing' if reference.missing }}>{{ reference | bibliography_entry({doi_link: "id"}) | safe }}</li>
+	{% endfor %}
+</ol>

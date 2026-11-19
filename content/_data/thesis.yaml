@@ -1,0 +1,37 @@
+# Single source of thesis metadata.
+# Used by Eleventy (as `thesis.*`) AND by pandoc (--metadata-file) for PDF/DOCX.
+
+title: "A Placeholder Dissertation Title"
+author: "Author Name"
+degree: "Doctor of Philosophy"
+program: "Computer Science"
+date: "May 31, 2027"
+location: "Nashville, Tennessee"
+committee:
+  - name: "Advisor Name, Ph.D."
+    chair: true
+  - name: "Committee Member, Ph.D."
+  - name: "Committee Member, Ph.D."
+  - name: "Committee Member, Ph.D."
+
+# Optional front matter (Markdown allowed). Delete a key to omit that page.
+copyright: "Copyright © 2027 Author Name\\\nAll Rights Reserved"
+dedication: |
+  To ...
+acknowledgments: |
+  Acknowledge funding sources and people here.
+
+# ---- Print/export settings (mirrors the Vanderbilt 2026 Overleaf template) ----
+fontsize: 10pt          # the 2026 template uses 10pt; change to 12pt if your program asks
+papersize: letter
+toc: true
+lot: true               # list of tables
+lof: true               # list of figures
+numbersections: true
+secnumdepth: 7
+biblio-title: References
+biblio-style: apalike   # natbib style used for the PDF (matches the Overleaf template)
+natbiboptions: authoryear
+link-citations: true
+# Base URL of the published site, used in the PDF/DOCX to point readers at interactive demos
+site-url: "https://example.com"

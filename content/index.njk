@@ -1,0 +1,18 @@
+---
+layout: layouts/base.njk
+---
+<section class="title-page">
+	<h1>{{ thesis.title }}</h1>
+	<p>{{ thesis.author }}</p>
+	<p>{{ thesis.degree }} · {{ thesis.program }} · Vanderbilt University</p>
+	<p>{{ thesis.date }}</p>
+</section>
+
+<nav class="toc">
+	<h2>Contents</h2>
+	<ol>
+	{% for ch in collections.chapters %}
+		<li><a href="{{ ch.url }}">{{ ch.data.title }}</a></li>
+	{% endfor %}
+	</ol>
+</nav>

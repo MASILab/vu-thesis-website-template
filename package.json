@@ -1,0 +1,28 @@
+{
+  "name": "vu-dissertation-11ty",
+  "version": "1.0.0",
+  "description": "Eleventy + Pandoc dissertation template (citations, KaTeX, figures, JS demos) with Vanderbilt PDF/DOCX export",
+  "scripts": {
+    "start": "eleventy --serve",
+    "build": "eleventy",
+    "pdf": "node scripts/export.js pdf",
+    "tex": "node scripts/export.js tex",
+    "docx": "node scripts/export.js docx",
+    "export": "node scripts/export.js all"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.8",
+    "@mdit/plugin-katex": "^1.2.0",
+    "eleventy-plugin-citations": "^0.1.10",
+    "js-yaml": "^5.5.0",
+    "katex": "^0.19.1",
+    "markdown-it-attrs": "^5.0.1",
+    "markdown-it-container": "^4.0.0",
+    "markdown-it-footnote": "^4.0.0",
+    "markdown-it-implicit-figures": "^0.12.0"
+  }
+}
