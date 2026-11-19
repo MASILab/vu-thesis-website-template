@@ -42,8 +42,8 @@ mainClass: with-sidebar
 <nav class="chapter-nav">
 	{% set prev = collections.chapters | getPreviousCollectionItem %}
 	{% set next = collections.chapters | getNextCollectionItem %}
-	{% if prev %}<a rel="prev" href="{{ prev.url }}">← Previous</a>{% endif %}
-	{% if next %}<a rel="next" href="{{ next.url }}">Next →</a>{% endif %}
+	{% if prev %}<a rel="prev" href="{{ prev.url }}">Previous</a>{% else %}<span class="disabled">Previous</span>{% endif %}
+	{% if next %}<a rel="next" href="{{ next.url }}">Next</a>{% else %}<span class="disabled">Next</span>{% endif %}
 </nav>
 </div>
 
