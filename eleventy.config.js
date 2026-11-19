@@ -1,3 +1,4 @@
+import { HtmlBasePlugin } from "@11ty/eleventy";
 import { load as yamlLoad } from "js-yaml";
 import citations from "eleventy-plugin-citations";
 import { katex } from "@mdit/plugin-katex";
@@ -29,6 +30,10 @@ function pandocTableCaptions(md) {
 }
 
 export default function (eleventyConfig) {
+	// ---- Base path: rewrites root-relative URLs (/figures/x.svg) when served from a
+	// subfolder, e.g. GitHub project pages at /<repo>/. Set via PATH_PREFIX.
+	eleventyConfig.addPlugin(HtmlBasePlugin);
+
 	// ---- Shared thesis metadata (also passed to pandoc via --metadata-file) ----
 	eleventyConfig.addDataExtension("yaml", (contents) => yamlLoad(contents));
 
@@ -81,6 +86,7 @@ export default function (eleventyConfig) {
 	eleventyConfig.addPassthroughCopy({ "node_modules/katex/dist": "assets/katex" });
 
 	return {
+		pathPrefix: process.env.PATH_PREFIX || "/",
 		dir: { input: "content", output: "_site" },
 		// Keep chapters as pure Pandoc Markdown: no Nunjucks pre-processing, so LaTeX
 		// like `{{x}}` is safe and the same files feed pandoc unchanged.

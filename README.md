@@ -63,6 +63,24 @@ $$ \hat\beta = (X^\top X)^{-1} X^\top y $$
 :::
 ```
 
+## Deploying to GitHub Pages
+
+`.github/workflows/deploy.yml` builds the website and the PDF on every push to `main`, then publishes both.
+
+1. Push this project to a GitHub repository.
+2. In the repository, go to **Settings → Pages** and set **Source** to **GitHub Actions**.
+3. Push to `main`, or run the workflow by hand from the **Actions** tab.
+
+The site appears at `https://<user>.github.io/<repo>/`, and the PDF at `https://<user>.github.io/<repo>/thesis.pdf`. Put that address in `site-url` in `thesis.yaml` so the PDF's "interactive version available online" notes point to it.
+
+Project sites are served from a `/<repo>/` subfolder. The workflow passes that path to Eleventy as `PATH_PREFIX`, which rewrites links such as `/figures/x.svg` to match. User sites (`<user>.github.io`) and custom domains need no prefix, and the workflow handles that automatically. To check a subfolder build locally:
+
+```bash
+PATH_PREFIX=/my-repo/ npm run build
+```
+
+URLs that your demo JavaScript builds itself (for example in `fetch("/data.json")`) are not rewritten. Use relative paths in those.
+
 ## About the PDF
 
 `export/latex/vanderbilt.latex` contains the Graduate School's template verbatim (preamble, title page, preliminary pages, spacing and pagination), and `sfchap.sty` and `sfsection.sty` are copied unchanged. When the template's own sample content is built with this pipeline, 14 of the 15 pages are pixel-identical to the original PDF.
