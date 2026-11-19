@@ -8,8 +8,11 @@
 	<link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
-	<header class="site-header"><a href="/">{{ thesis.title }}</a></header>
-	<main>
+	<header class="site-bar">
+		<a class="site-title" href="/">{{ thesis.title }}</a>
+		<nav class="site-nav"><a href="/about/"{% if page.url == "/about/" %} aria-current="page"{% endif %}>About</a></nav>
+	</header>
+	<main{% if mainClass %} class="{{ mainClass }}"{% endif %}>
 		{{ content | safe }}
 	</main>
 	<footer class="site-footer">

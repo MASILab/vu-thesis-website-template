@@ -1,23 +1,39 @@
 ---
 layout: layouts/base.njk
+mainClass: with-sidebar
 ---
 {%- set entry = collections.chapters | outlineEntry(page.url) -%}
-{%- if entry.kind == "part" -%}
+{%- set body = content | citations -%}
+{%- set secs = body | sections -%}
+{%- set hasRefs = references and references.length -%}
+<aside class="sidebar">
+	{%- if secs.length or hasRefs %}
+	<details class="page-toc" open>
+		<summary>On this page</summary>
+		<ul>
+		{% for s in secs %}
+			<li><a href="#{{ s.id }}">{{ s.html | safe }}</a></li>
+		{% endfor %}
+		{% if hasRefs %}<li><a href="#references">References</a></li>{% endif %}
+		</ul>
+	</details>
+	{%- endif %}
+</aside>
+
+<div class="content">
+{%- if entry.kind == "part" %}
 <article class="part">
 	<h1><span class="chapter-num">{{ entry.label }}</span> {{ entry.title }}</h1>
-
-	{{ content | citations | safe }}
-
-{%- else -%}
+{%- else %}
 <article class="chapter" style="--chapter: {{ entry.number }}">
 	<h1><span class="chapter-num">{{ entry.label }}</span> {{ title }}</h1>
-
-	{{ content | citations | safe }}
 {%- endif %}
 
-	{% if references and references.length %}
+	{{ body | safe }}
+
+	{% if hasRefs %}
 	<section class="references">
-		<h2 class="unnumbered">References</h2>
+		<h2 class="unnumbered" id="references">References</h2>
 		{% include "references.njk" %}
 	</section>
 	{% endif %}
@@ -29,3 +45,48 @@ layout: layouts/base.njk
 	{% if prev %}<a rel="prev" href="{{ prev.url }}">← Previous</a>{% endif %}
 	{% if next %}<a rel="next" href="{{ next.url }}">Next →</a>{% endif %}
 </nav>
+</div>
+
+<script>
+	// Sidebar: open on wide screens, collapsible on phones; highlight the section in view.
+	(() => {
+		const toc = document.querySelector(".page-toc");
+		if (!toc) return;
+		const wide = matchMedia("(min-width: 960px)");
+		const sync = () => { toc.open = wide.matches; };
+		sync();
+		wide.addEventListener("change", sync);
+		toc.addEventListener("click", (e) => { if (e.target.closest("a") && !wide.matches) toc.open = false; });
+
+		const links = new Map([...toc.querySelectorAll("a")].map((a) => [decodeURIComponent(a.hash.slice(1)), a]));
+		const targets = [...links.keys()].map((id) => document.getElementById(id)).filter(Boolean);
+		const mark = (id) => {
+			links.forEach((a) => a.removeAttribute("aria-current"));
+			if (id && links.has(id)) links.get(id).setAttribute("aria-current", "true");
+		};
+		// While scrolling: the section whose heading is in the top third of the window
+		// (at the very bottom of the page, the last heading that is visible at all).
+		const fromScroll = () => {
+			const atBottom = innerHeight + scrollY >= document.documentElement.scrollHeight - 2;
+			const line = atBottom ? innerHeight : innerHeight / 3;
+			let current = targets[0];
+			for (const t of targets) if (t.getBoundingClientRect().top < line) current = t;
+			mark(current?.id);
+		};
+		// After following a link (#section): that section, until the reader scrolls.
+		let pinned = false;
+		const fromHash = () => {
+			const id = decodeURIComponent(location.hash.slice(1));
+			if (!links.has(id)) return fromScroll();
+			pinned = true;
+			mark(id);
+		};
+		for (const ev of ["wheel", "touchmove", "keydown"]) addEventListener(ev, () => {
+			if (pinned) { pinned = false; requestAnimationFrame(fromScroll); }
+		}, { passive: true });
+		addEventListener("scroll", () => { if (!pinned) fromScroll(); }, { passive: true });
+		addEventListener("hashchange", fromHash);
+		addEventListener("load", () => requestAnimationFrame(fromHash));
+		fromHash();
+	})();
+</script>

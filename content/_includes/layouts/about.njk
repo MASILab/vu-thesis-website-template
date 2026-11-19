@@ -1,0 +1,13 @@
+---
+layout: layouts/base.njk
+---
+<article class="about">
+	<h1>About</h1>
+	<div class="about-body">
+		{% if photo %}<img class="about-photo" src="{{ photo }}" alt="{{ photoAlt or ('Photo of ' + thesis.author) }}" width="240" height="240">{% endif %}
+		<div>
+			<h2>{{ thesis.author }}</h2>
+			{{ content | safe }}
+		</div>
+	</div>
+</article>

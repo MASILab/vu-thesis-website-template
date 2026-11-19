@@ -3,6 +3,7 @@ import { load as yamlLoad } from "js-yaml";
 import citations from "eleventy-plugin-citations";
 import { katex } from "@mdit/plugin-katex";
 import markdownItAttrs from "markdown-it-attrs";
+import markdownItAnchor from "markdown-it-anchor";
 import markdownItContainer from "markdown-it-container";
 import markdownItFootnote from "markdown-it-footnote";
 import implicitFigures from "markdown-it-implicit-figures";
@@ -69,6 +70,8 @@ export default function (eleventyConfig) {
 	eleventyConfig.amendLibrary("md", (md) => {
 		md.use(katex, { output: "html" })
 			.use(markdownItAttrs)
+			// ids on ## / ### headings for the sidebar (an explicit {#id} wins)
+			.use(markdownItAnchor, { level: [2, 3], tabIndex: false })
 			.use(implicitFigures, { figcaption: true })
 			.use(markdownItFootnote)
 			// ::: {.demo fallback="/figures/x.svg" caption="..."}  ...raw HTML/JS...  :::
@@ -102,6 +105,10 @@ export default function (eleventyConfig) {
 	);
 
 	eleventyConfig.addFilter("outline", outline);
+	// Sidebar: the page's ## headings as {id, html}. Titles only; numbers come from CSS.
+	eleventyConfig.addFilter("sections", (html = "") =>
+		[...html.matchAll(/<h2\b[^>]*\bid="([^"]+)"[^>]*>([\s\S]*?)<\/h2>/g)].map(([, id, inner]) => ({ id, html: inner.trim() })),
+	);
 	eleventyConfig.addFilter("outlineEntry", (items, url) => outline(items).find((e) => e.url === url));
 
 	// ---- Static files ----

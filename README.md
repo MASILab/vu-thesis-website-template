@@ -38,6 +38,7 @@ npm install
 | `content/references.bib` | BibTeX library |
 | `content/figures/` | Images (SVG, PNG or JPG). SVGs are converted to PDF for print automatically. |
 | `content/demos/` | JavaScript for the interactive demos |
+| `content/about.md` | The About page (`/about/`): your description in Markdown, plus `photo:` (put the image in `content/assets/`) |
 
 ### Parts
 
