@@ -16,7 +16,7 @@
 		<p>
 			© {{ thesis["copyright-year"] or buildYear }} {{ thesis.author }}.
 			{% if thesis.license %}
-			Licensed under {% if thesis.license.url %}<a href="{{ thesis.license.url }}" rel="license">{{ thesis.license.name }}</a>{% else %}{{ thesis.license.name }}{% endif %}.
+			Content licensed under {% if thesis.license.url %}<a href="{{ thesis.license.url }}" rel="license">{{ thesis.license.name }}</a>{% else %}{{ thesis.license.name }}{% endif %}.
 			{% else %}
 			All rights reserved.
 			{% endif %}
