@@ -9,13 +9,16 @@
 </head>
 <body>
 	<header class="site-bar">
-		<a class="site-title" href="/">{{ thesis.title }}</a>
-		<nav class="site-nav"><a href="/about/"{% if page.url == "/about/" %} aria-current="page"{% endif %}>About</a></nav>
+		<div class="bar-inner">
+			<a class="site-title" href="/">{{ thesis.title }}</a>
+			<nav class="site-nav"><a href="/about/"{% if page.url == "/about/" %} aria-current="page"{% endif %}>About</a></nav>
+		</div>
 	</header>
 	<main{% if mainClass %} class="{{ mainClass }}"{% endif %}>
 		{{ content | safe }}
 	</main>
 	<footer class="site-footer">
+		<div class="footer-inner">
 		<p>
 			© {{ thesis["copyright-year"] or buildYear }} {{ thesis.author }}.
 			{% if thesis.license %}
@@ -24,6 +27,7 @@
 			All rights reserved.
 			{% endif %}
 		</p>
+		</div>
 	</footer>
 </body>
 </html>

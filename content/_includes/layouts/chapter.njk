@@ -52,7 +52,7 @@ mainClass: with-sidebar
 	(() => {
 		const toc = document.querySelector(".page-toc");
 		if (!toc) return;
-		const wide = matchMedia("(min-width: 960px)");
+		const wide = matchMedia("(min-width: 64em)");
 		const sync = () => { toc.open = wide.matches; };
 		sync();
 		wide.addEventListener("change", sync);
