@@ -1,14 +1,12 @@
 {
   "name": "vu-dissertation-11ty",
   "version": "1.0.0",
-  "description": "Eleventy + Pandoc dissertation template (citations, KaTeX, figures, JS demos) with Vanderbilt PDF/DOCX export",
+  "description": "Eleventy + Pandoc dissertation template (citations, KaTeX, figures, JS demos) with PDF export in the Vanderbilt LaTeX template",
   "scripts": {
     "start": "eleventy --serve",
     "build": "eleventy",
     "pdf": "node scripts/export.js pdf",
-    "tex": "node scripts/export.js tex",
-    "docx": "node scripts/export.js docx",
-    "export": "node scripts/export.js all"
+    "tex": "node scripts/export.js tex"
   },
   "keywords": [],
   "author": "",

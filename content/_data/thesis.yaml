@@ -1,37 +1,25 @@
 # Single source of thesis metadata.
-# Used by Eleventy (as `thesis.*`) AND by pandoc (--metadata-file) for PDF/DOCX.
+# Used by Eleventy (as `thesis.*`) AND by pandoc (--metadata-file) for the PDF.
+# Each field fills the matching placeholder in the Vanderbilt 2026 LaTeX template.
 
-title: "A Placeholder Dissertation Title"
-author: "Author Name"
-degree: "Doctor of Philosophy"
-program: "Computer Science"
-date: "May 31, 2027"
-location: "Nashville, Tennessee"
-committee:
-  - name: "Advisor Name, Ph.D."
-    chair: true
-  - name: "Committee Member, Ph.D."
-  - name: "Committee Member, Ph.D."
-  - name: "Committee Member, Ph.D."
+title: "A Placeholder Dissertation Title"   # printed in uppercase on the title page
+author: "Full Legal Name"
+degree: "DOCTOR OF PHILOSOPHY"
+major: "Computer Science"
+date: "May 31, 2027"   # degree conferral date from your Intent to Graduate form
+committee:             # printed in this order under "Approved:"
+  - "Committee Chair, Ph.D."
+  - "Committee member, Ph.D."
+  - "Committee member, Ph.D."
+  - "Committee member, Ph.D."
 
-# Optional front matter (Markdown allowed). Delete a key to omit that page.
-copyright: "Copyright © 2027 Author Name\\\nAll Rights Reserved"
+# ---- Optional preliminary pages: delete a key to omit that page ----
+copyright-year: 2027
 dedication: |
   To ...
 acknowledgments: |
-  Acknowledge funding sources and people here.
+  The acknowledgements page is optional. Acknowledgement of grant and contract
+  support may be included on this page.
 
-# ---- Print/export settings (mirrors the Vanderbilt 2026 Overleaf template) ----
-fontsize: 10pt          # the 2026 template uses 10pt; change to 12pt if your program asks
-papersize: letter
-toc: true
-lot: true               # list of tables
-lof: true               # list of figures
-numbersections: true
-secnumdepth: 7
-biblio-title: References
-biblio-style: apalike   # natbib style used for the PDF (matches the Overleaf template)
-natbiboptions: authoryear
-link-citations: true
-# Base URL of the published site, used in the PDF/DOCX to point readers at interactive demos
+# Base URL of the published site; the PDF points readers here for interactive demos.
 site-url: "https://example.com"

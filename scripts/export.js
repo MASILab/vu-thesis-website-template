@@ -1,17 +1,18 @@
 #!/usr/bin/env node
-// Concatenate chapters -> build/thesis.md, then run pandoc.
-//   node scripts/export.js pdf|tex|docx|all
+// Concatenate chapters -> build/thesis.md, then pandoc -> LaTeX (Vanderbilt template) -> PDF.
+//   node scripts/export.js        build/thesis.pdf
+//   node scripts/export.js tex    build/thesis.tex only (e.g. to upload to Overleaf)
 import fs from "node:fs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
 import { load as yamlLoad } from "js-yaml";
 
-const target = process.argv[2] ?? "all";
+const target = process.argv[2] ?? "pdf";
 const root = process.cwd();
 const build = path.join(root, "build");
 fs.mkdirSync(path.join(build, "figures"), { recursive: true });
 
-// 1. Chapters -> one Markdown file, front-matter `title` becomes the chapter heading.
+// 1. Chapters -> one Markdown file; front-matter `title` becomes the chapter heading.
 const chapterDir = path.join(root, "content/chapters");
 const files = fs.readdirSync(chapterDir).filter((f) => f.endsWith(".md")).sort();
 let md = "";
@@ -25,40 +26,41 @@ for (const f of files) {
 }
 fs.writeFileSync(path.join(build, "thesis.md"), md);
 
-// 2. SVG figures -> PDF (for LaTeX) and PNG (for Word).
+// 2. SVG figures -> PDF for pdflatex.
 for (const f of fs.readdirSync(path.join(root, "content/figures"))) {
 	if (!f.endsWith(".svg")) continue;
-	const src = path.join(root, "content/figures", f);
 	const stem = path.basename(f, ".svg");
-	run("rsvg-convert", ["-f", "pdf", "-o", path.join(build, "figures", stem + ".pdf"), src]);
-	run("rsvg-convert", ["-f", "png", "-z", "3", "-o", path.join(build, "figures", stem + ".png"), src]);
+	run("rsvg-convert", ["-f", "pdf", "-o", path.join(build, "figures", stem + ".pdf"), path.join(root, "content/figures", f)]);
 }
 
-// 3. Pandoc.
-const common = [
+// 3. pandoc -> build/thesis.tex
+run("pandoc", [
 	"build/thesis.md",
 	"--from=markdown",
 	"--metadata-file=content/_data/thesis.yaml",
 	"--lua-filter=export/filters/web-to-print.lua",
 	"--top-level-division=chapter",
 	"--bibliography=content/references.bib",
-];
-
-if (["tex", "pdf", "all"].includes(target)) {
-	run("pandoc", [...common, "--template=export/vanderbilt.latex", "--natbib", "--standalone", "-o", "build/thesis.tex"]);
-	// pandoc writes \bibliography{content/references.bib}; LaTeX runs in build/, so point at the real file.
-	const tex = fs.readFileSync("build/thesis.tex", "utf8").replace(/\\bibliography\{content\/references(\.bib)?\}/, `\\bibliography{${path.join(root, "content/references")}}`);
-	fs.writeFileSync("build/thesis.tex", tex);
-	if (target !== "tex") {
-		run("latexmk", ["-pdf", "-interaction=nonstopmode", "-halt-on-error", "-silent", "-cd", "build/thesis.tex"]);
-		console.log("✓ build/thesis.pdf");
-	} else console.log("✓ build/thesis.tex");
-}
-if (["docx", "all"].includes(target)) {
-	run("pandoc", [...common, "--citeproc", "--csl=export/apa.csl", "--metadata=reference-section-title:References", "--reference-doc=export/reference.docx", "--toc", "--number-sections", "-o", "build/thesis.docx"]);
-	console.log("✓ build/thesis.docx");
+	"--natbib",
+	"--template=export/latex/vanderbilt.latex",
+	"--standalone",
+	"-o", "build/thesis.tex",
+]);
+// LaTeX runs inside build/, so point \bibliography at the real file.
+const texPath = path.join(build, "thesis.tex");
+const tex = fs.readFileSync(texPath, "utf8").replace(/\\bibliography\{content\/references(\.bib)?\}/, `\\bibliography{${path.join(root, "content/references")}}`);
+fs.writeFileSync(texPath, tex);
+if (target === "tex") {
+	console.log("✓ build/thesis.tex  (needs export/latex/sfchap.sty + sfsection.sty alongside it)");
+	process.exit(0);
 }
 
-function run(cmd, args) {
-	execFileSync(cmd, args, { stdio: ["ignore", "inherit", "inherit"] });
+// 4. latexmk (sfchap.sty / sfsection.sty are found via TEXINPUTS)
+run("latexmk", ["-pdf", "-interaction=nonstopmode", "-halt-on-error", "-silent", "-cd", "build/thesis.tex"], {
+	TEXINPUTS: `${path.join(root, "export/latex")}//:`,
+});
+console.log("✓ build/thesis.pdf");
+
+function run(cmd, args, env = {}) {
+	execFileSync(cmd, args, { stdio: ["ignore", "inherit", "inherit"], env: { ...process.env, ...env } });
 }

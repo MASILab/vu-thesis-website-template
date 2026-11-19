@@ -3,7 +3,7 @@ title: Introduction
 ---
 
 This template keeps every chapter in plain [Pandoc Markdown](https://pandoc.org/MANUAL.html#pandocs-markdown),
-so the same file renders as a web page (Eleventy) and as a Vanderbilt-formatted PDF or Word document (pandoc).
+so the same file renders as a web page (Eleventy) and as a PDF in the official Vanderbilt LaTeX template (pandoc).
 
 ## Citations
 
@@ -21,6 +21,6 @@ $$
 
 ## Footnotes
 
-Footnotes work in both outputs.[^1]
+Footnotes work on the web and in the PDF.[^1]
 
 [^1]: Like this one.

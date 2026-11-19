@@ -5,13 +5,13 @@ title: Methods
 ## Static figures
 
 A paragraph containing only an image becomes a numbered figure; the alt text is the caption.
-Use SVG or PNG — SVGs are converted to PDF/PNG automatically for print.
+Use SVG or PNG — SVGs are converted to PDF automatically for print.
 
 ![A simple example figure. Captions can include math such as $y = \sin x$.](/figures/example.svg){#fig:example width=70%}
 
 ## Interactive demos
 
-Wrap any HTML/JavaScript in a `demo` block. On the web it runs; in the PDF/DOCX it is replaced
+Wrap any HTML/JavaScript in a `demo` block. On the web it runs; in the PDF it is replaced
 by the `fallback` image with the same caption plus a note pointing to the online version.
 
 ::: {.demo #fig:sine-demo fallback="/figures/example.svg" caption="Drag the slider to change the frequency of $\sin(kx)$."}

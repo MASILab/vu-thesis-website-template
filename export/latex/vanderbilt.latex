@@ -1,0 +1,248 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Pandoc version of the official Vanderbilt University Graduate School LaTeX
+% dissertation template ("correct as of October 2026").
+%
+% Everything between the "VERBATIM" markers is copied unchanged from
+% VanderbiltDissertationFormat.tex and Sections/*.tex. Only the user-specific text
+% (title, name, committee, ...) comes from content/_data/thesis.yaml. The pandoc
+% compatibility block adds definitions without changing any of the template's settings.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% ===== VERBATIM: VanderbiltDissertationFormat.tex preamble =====
+\listfiles
+\documentclass[10pt]{report}  %%% Changed from 12pt.
+
+\usepackage[intoc]{nomencl}
+
+%\textwidth=6in \oddsidemargin=0.5in \topmargin=-0.5in
+%\textheight=9in  % 9in must include page numbers
+\usepackage[letterpaper, margin=1in]{geometry}
+\textfloatsep = 0.4in \addtocontents{toc}{\vspace{0.4in} \hfill
+Page\endgraf} \addtocontents{lof}{\vspace{0.2in} \hspace{0.13in} \
+Figure\hfill Page\endgraf} \addtocontents{lot}{\vspace{0.2in}
+\hspace{0.13in} \ Table\hfill Page\endgraf}
+
+\usepackage{textcomp}
+\usepackage{array}
+\usepackage{listings}
+\usepackage{setspace}
+\usepackage{mathptmx}
+\usepackage[table, svgnames]{xcolor}
+\usepackage{colortbl}
+\usepackage{graphicx}
+\usepackage{amssymb, amsmath}
+\usepackage{subfig}
+\usepackage{epsfig}
+\usepackage{times}
+\usepackage{float}
+\usepackage{rotating}
+\usepackage{makeidx}
+\usepackage{url}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{tabularx}
+
+\usepackage[subfigure, titles]{tocloft}
+\usepackage{acronym}
+\usepackage{datetime}
+
+
+%%another algorithm package
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+\renewcommand{\nomname}{LIST OF ABBREVIATIONS}
+\makenomenclature
+
+\graphicspath{{Figures/}}
+\DeclareGraphicsExtensions{.pdf,.jpeg,.png,.PNG, .eps, .tiff}
+
+\urlstyle{same}
+
+\usepackage{makecell}
+\usepackage{titletoc}
+\usepackage{sfchap}
+\usepackage{sfsection}
+\usepackage[authoryear]{natbib}
+%\usepackage{apacite}
+\usepackage{appendix}
+%\usepackage{tocbibind}
+%
+\usepackage[nottoc]{tocbibind}
+\setcounter{secnumdepth}{7}
+\setcounter{tocdepth}{7}
+
+\usepackage{hyperref}
+\hypersetup{
+	pdftitle={$title$},
+	pdfauthor={$author$},
+	bookmarksnumbered, %Determined if chapter numbers are included in the bookmark list
+	pdfstartview={FitH},
+	pdfborder={0 0 0},
+	plainpages=false
+}%
+\usepackage[all]{hypcap}
+
+% Stats table label
+\newcommand{\statslabel}[2]{\multirowcell{#1}[-1.6mm][c]{#2}}
+
+% Below heading rule.
+\newcommand{\otoprule}{\midrule[\heavyrulewidth]}
+
+% Prevent double spaced equations
+\newenvironment{tightequation}{\singlespace\begin{equation}}{\end{equation}}
+
+% Extra junk to pretty up the table of contents
+\setlength{\cftsecnumwidth}{2.8em}
+\setlength{\cftsubsecnumwidth}{3.7em}
+\setlength{\cftsubsubsecnumwidth}{4.6em}
+\setlength{\cftparanumwidth}{5.5em}
+\setlength{\cftsubparanumwidth}{6.5em}
+\setlength{\cfttabnumwidth}{3.5em}
+\setlength{\cftfignumwidth}{3.5em}
+
+\renewcommand{\contentsname}{TABLE OF CONTENTS}
+\renewcommand{\listfigurename}{LIST OF FIGURES}
+\renewcommand{\listtablename}{LIST OF TABLES}
+\renewcommand{\bibname}{ \texorpdfstring{{References\vspace{10mm}}}{References}   }
+%
+\renewcommand{\chaptermark}[1]{%
+  \markboth{\MakeUppercase{%
+      \chaptername}\ \thechapter.%
+    \ #1}{}}
+
+
+\interfootnotelinepenalty=10000 %prevents the splitting of long footnotes across multiple pages. Use with caution.
+%% ===== END VERBATIM =====
+
+%% ===== Pandoc compatibility: only macros pandoc's LaTeX writer emits =====
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}\else\usebox{\pandoc@box}\fi}
+\makeatother
+$if(highlighting-macros)$
+$highlighting-macros$
+$endif$
+$if(strikeout)$
+\usepackage{soul}
+$endif$
+$if(tables)$
+% only for complex tables (merged cells) the Lua filter leaves to pandoc
+\usepackage{longtable,calc}
+$endif$
+$for(header-includes)$
+$header-includes$
+$endfor$
+%% ===== end pandoc compatibility =====
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Prevent the warning: pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
+%%	This setting will make a difference to the output because the page number is suppressed for the title page
+\pagenumbering{alph}
+
+%% ===== VERBATIM: Sections/Title.tex =====
+\begin{titlepage}
+\thispagestyle{empty}\enlargethispage{\the\footskip}%
+\begin{center}
+    \hspace{1em}\vspace{6em} \\ % add space before content
+	{\setstretch{1.66} \MakeUppercase{$title$}\par }%
+	\vskip.5in
+	By
+	\vskip .4in
+	{$author$}
+	\vskip .4in
+
+	\begin{doublespace}
+	Dissertation\\
+		Submitted to the Faculty of the \\
+		Graduate School of Vanderbilt University \\
+		in partial fulfillment of the requirements \\
+		for the degree of \\ [.2in]
+	\end{doublespace}
+
+	$degree$ \\[.1in]
+	in \\[.2in]
+	$major$ \\[.2in]
+	$date$ \\[.2in]
+	%%%The date will reflect your proposed degree conferral date as selected from the Intent to Graduate form. This is your actual graduation date, not your thesis or defense date.%%%
+
+	Nashville, Tennessee
+	\vskip .5in
+\end{center}
+
+\begin{center}
+\begin{doublespace}
+Approved:\\ [.2in]
+$for(committee)$
+$committee$$sep$ \\  [.1in]
+$endfor$
+\end{doublespace}
+\end{center}
+\end{titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\doublespacing
+\pagenumbering{roman} \setcounter{page}{2}
+
+% These 3 sections are optional
+\singlespacing
+$if(copyright-year)$
+%% ===== VERBATIM: Sections/Copyright.tex =====
+\chapter*{}
+\hspace{1em}\vspace{18em} \\ % add space before content
+\begin{center}
+    Copyright {\textcopyright} $copyright-year$ $author$ \\
+    All Rights Reserved
+\end{center}
+$endif$
+$if(dedication)$
+%% ===== VERBATIM: Sections/Dedication.tex =====
+\chapter*{}
+\hspace{1em} \vspace{17em} \\ % add space before content
+\begin{center}
+$dedication$
+\end{center}
+$endif$
+$if(acknowledgments)$
+%% ===== VERBATIM: Sections/Acknowledgments.tex =====
+\chapter*{ACKNOWLEDGMENTS}
+\vspace{7mm}
+
+$acknowledgments$
+$endif$
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\singlespacing
+\tableofcontents
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begingroup
+\setlength{\parskip}{1\baselineskip}
+\listoftables
+\newpage
+\listoffigures
+\newpage
+%\printnomenclature %list of abbreviations is optional
+%\newpage
+\endgroup
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\normalsize
+\doublespacing
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+$body$
+
+\singlespacing
+\bibliographystyle{apalike}
+\bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
+\end{document}
