@@ -8,11 +8,6 @@ layout: layouts/base.njk
 
 	{{ content | citations | safe }}
 
-	<ol class="part-contents">
-	{% for e in collections.chapters | outline %}{% if e.part and e.part.url == page.url %}
-		<li><a href="{{ e.url }}"><span class="toc-num">{{ e.number }}</span> {{ e.title }}</a></li>
-	{% endif %}{% endfor %}
-	</ol>
 {%- else -%}
 <article class="chapter" style="--chapter: {{ entry.number }}">
 	<h1><span class="chapter-num">{{ entry.label }}</span> {{ title }}</h1>
@@ -31,6 +26,6 @@ layout: layouts/base.njk
 <nav class="chapter-nav">
 	{% set prev = collections.chapters | getPreviousCollectionItem %}
 	{% set next = collections.chapters | getNextCollectionItem %}
-	{% if prev %}<a rel="prev" href="{{ prev.url }}">← {{ prev.data.title or prev.data.part }}</a>{% endif %}
-	{% if next %}<a rel="next" href="{{ next.url }}">{{ next.data.title or next.data.part }} →</a>{% endif %}
+	{% if prev %}<a rel="prev" href="{{ prev.url }}">← Previous</a>{% endif %}
+	{% if next %}<a rel="next" href="{{ next.url }}">Next →</a>{% endif %}
 </nav>

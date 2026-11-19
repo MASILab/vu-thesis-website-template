@@ -12,7 +12,7 @@ layout: layouts/base.njk
 	<h2>Contents</h2>
 	<ol class="toc-list">
 	{% for e in collections.chapters | outline %}
-		<li class="toc-{{ e.kind }}{{ ' in-part' if e.part }}"><a href="{{ e.url }}"><span class="toc-num">{{ e.label if e.kind == "part" else e.number }}</span> {{ e.title }}</a></li>
+		<li class="toc-{{ e.kind }}{{ ' in-part' if e.part }}"><span class="toc-num">{{ e.label if e.kind == "part" else e.number }}</span><a href="{{ e.url }}">{{ e.title }}</a></li>
 	{% endfor %}
 	</ol>
 </nav>
