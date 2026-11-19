@@ -1,4 +1,4 @@
-# Vanderbilt dissertation — Eleventy + Pandoc
+# Vanderbilt thesis website template
 
 Write your dissertation once in Markdown and get two outputs:
 
