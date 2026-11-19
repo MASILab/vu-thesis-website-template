@@ -9,7 +9,6 @@
 	--rule: #e4e4e4;       /* Light Gray: light borders */
 	--border: #777777;     /* Dark Gray: table and pager borders */
 	--surface: #f5f3ef;    /* Cream: footer band, table header */
-	--active: #e0d5c0;     /* Sand: current TOC entry */
 	--sans: -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
 	--mono: Monaco, Consolas, "Lucida Console", monospace;
 }
@@ -99,7 +98,7 @@ main h1:first-child, .content > article > h1:first-child { margin-top: 0; }
 .page-toc a { display: block; padding: .25rem .75rem; color: var(--text); font-weight: bold; line-height: 1.5; text-decoration: none; border-bottom: 1px solid var(--rule); }
 .page-toc li:last-child a { border-bottom: 0; }
 .page-toc a:hover { color: var(--link); }
-.page-toc a[aria-current] { background: var(--active); color: var(--text); }
+.page-toc a[aria-current] { background: var(--text); color: var(--gold); }
 
 /* Footer: full-width band, text in the centered container */
 .site-footer { flex-shrink: 0; margin-top: 3rem; background: var(--surface); color: var(--text); }
