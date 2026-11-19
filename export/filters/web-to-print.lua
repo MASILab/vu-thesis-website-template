@@ -172,9 +172,18 @@ function Underline(u)
   return pandoc.RawInline("latex", "\\underline{" .. latex{ pandoc.Plain(u.content) } .. "}")
 end
 
+-- Part dividers: "# Title {.part}" (written by scripts/export.js) -> \part{Title}.
+-- Parts are numbered I, II, ...; chapters keep counting straight through.
+function Header(h)
+  if h.level ~= 1 or not h.classes:includes("part") then return nil end
+  local out = "\\part{" .. latex{ pandoc.Plain(h.content) } .. "}"
+  if h.identifier ~= "" then out = out .. "\\label{" .. h.identifier .. "}" end
+  return pandoc.RawBlock("latex", out)
+end
+
 -- Meta must run before Div so site_url is known.
 return {
   { Meta = Meta },
-  { Image = Image, Div = Div, Table = Table, Underline = Underline },
+  { Image = Image, Div = Div, Table = Table, Underline = Underline, Header = Header },
   { Figure = Figure }, -- after Div, so demo fallbacks are rendered the same way
 }

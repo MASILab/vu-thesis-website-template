@@ -1,12 +1,24 @@
 ---
 layout: layouts/base.njk
 ---
-{%- set idx = 0 -%}
-{%- for ch in collections.chapters -%}{%- if ch.url == page.url -%}{%- set idx = loop.index -%}{%- endif -%}{%- endfor -%}
-<article class="chapter" style="--chapter: {{ idx }}">
-	<h1><span class="chapter-num">Chapter {{ idx }}</span> {{ title }}</h1>
+{%- set entry = collections.chapters | outlineEntry(page.url) -%}
+{%- if entry.kind == "part" -%}
+<article class="part">
+	<h1><span class="chapter-num">{{ entry.label }}</span> {{ entry.title }}</h1>
 
 	{{ content | citations | safe }}
+
+	<ol class="part-contents">
+	{% for e in collections.chapters | outline %}{% if e.part and e.part.url == page.url %}
+		<li><a href="{{ e.url }}"><span class="toc-num">{{ e.number }}</span> {{ e.title }}</a></li>
+	{% endif %}{% endfor %}
+	</ol>
+{%- else -%}
+<article class="chapter" style="--chapter: {{ entry.number }}">
+	<h1><span class="chapter-num">{{ entry.label }}</span> {{ title }}</h1>
+
+	{{ content | citations | safe }}
+{%- endif %}
 
 	{% if references and references.length %}
 	<section class="references">
@@ -19,6 +31,6 @@ layout: layouts/base.njk
 <nav class="chapter-nav">
 	{% set prev = collections.chapters | getPreviousCollectionItem %}
 	{% set next = collections.chapters | getNextCollectionItem %}
-	{% if prev %}<a rel="prev" href="{{ prev.url }}">← {{ prev.data.title }}</a>{% endif %}
-	{% if next %}<a rel="next" href="{{ next.url }}">{{ next.data.title }} →</a>{% endif %}
+	{% if prev %}<a rel="prev" href="{{ prev.url }}">← {{ prev.data.title or prev.data.part }}</a>{% endif %}
+	{% if next %}<a rel="next" href="{{ next.url }}">{{ next.data.title or next.data.part }} →</a>{% endif %}
 </nav>

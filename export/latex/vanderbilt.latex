@@ -136,6 +136,23 @@ $if(tables)$
 % only for complex tables (merged cells) the Lua filter leaves to pandoc
 \usepackage{longtable,calc}
 $endif$
+% Parts (the Graduate School allows parts in addition to chapters). Styled like the
+% template's chapter heads (sfchap.sty): "PART I", then the title, bold, normal size,
+% centered. They don't reset the chapter counter, so chapters number straight through.
+% Unused unless a chapter file sets `part:`.
+\makeatletter
+\renewcommand\part{\clearpage\thispagestyle{plain}\secdef\@part\@spart}
+\def\@part[#1]#2{%
+  \refstepcounter{part}%
+  \addcontentsline{toc}{part}{\partname\ \thepart: #1}%
+  {\parindent \z@ \centering \normalfont \bfseries
+   \MakeUppercase{\partname}\space\thepart\par\nobreak\vskip 20\p@
+   \interlinepenalty\@M #2\par\nobreak\vskip 20\p@}%
+  \@afterheading}
+\def\@spart#1{{\parindent \z@ \centering \normalfont \bfseries
+   \interlinepenalty\@M #1\par\nobreak\vskip 20\p@}\@afterheading}
+\let\l@part\l@chapter % same TOC style as chapters
+\makeatother
 $for(header-includes)$
 $header-includes$
 $endfor$

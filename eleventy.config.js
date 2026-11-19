@@ -29,6 +29,27 @@ function pandocTableCaptions(md) {
 	});
 }
 
+// Number parts (I, II, ...) and chapters (1, 2, ...) independently, in file order.
+// A file whose front matter has `part:` (and no `title:`) is a part divider.
+function toRoman(n) {
+	const map = [[10, "X"], [9, "IX"], [5, "V"], [4, "IV"], [1, "I"]];
+	let out = "";
+	for (const [v, r] of map) while (n >= v) (out += r), (n -= v);
+	return out;
+}
+function outline(items) {
+	let chapter = 0, part = 0, currentPart = null;
+	return items.map((item) => {
+		if (item.data.part) {
+			part++;
+			currentPart = { kind: "part", number: part, label: `Part ${toRoman(part)}`, title: item.data.part, url: item.url };
+			return currentPart;
+		}
+		chapter++;
+		return { kind: "chapter", number: chapter, label: `Chapter ${chapter}`, title: item.data.title, url: item.url, part: currentPart };
+	});
+}
+
 export default function (eleventyConfig) {
 	// ---- Base path: rewrites root-relative URLs (/figures/x.svg) when served from a
 	// subfolder, e.g. GitHub project pages at /<repo>/. Set via PATH_PREFIX.
@@ -79,6 +100,9 @@ export default function (eleventyConfig) {
 	eleventyConfig.addCollection("chapters", (api) =>
 		api.getFilteredByGlob("content/chapters/*.md").sort((a, b) => a.inputPath.localeCompare(b.inputPath)),
 	);
+
+	eleventyConfig.addFilter("outline", outline);
+	eleventyConfig.addFilter("outlineEntry", (items, url) => outline(items).find((e) => e.url === url));
 
 	// ---- Static files ----
 	eleventyConfig.addPassthroughCopy("content/figures");

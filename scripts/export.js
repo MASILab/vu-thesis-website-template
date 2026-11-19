@@ -12,7 +12,7 @@ const root = process.cwd();
 const build = path.join(root, "build");
 fs.mkdirSync(path.join(build, "figures"), { recursive: true });
 
-// 1. Chapters -> one Markdown file; front-matter `title` becomes the chapter heading.
+// 1. Chapters -> one Markdown file; front-matter `title` (or `part`) becomes the heading.
 const chapterDir = path.join(root, "content/chapters");
 const files = fs.readdirSync(chapterDir).filter((f) => f.endsWith(".md")).sort();
 let md = "";
@@ -22,7 +22,10 @@ for (const f of files) {
 	const data = m ? yamlLoad(m[1]) ?? {} : {};
 	const body = m ? raw.slice(m[0].length) : raw;
 	const slug = path.basename(f, ".md").replace(/^\d+-/, "");
-	md += `# ${data.title ?? slug} {#ch:${slug}}\n\n${body.trim()}\n\n`;
+	// `part:` files become \part{...} (see the Lua filter); everything else is a chapter.
+	md += data.part
+		? `# ${data.part} {.part #part:${slug}}\n\n${body.trim()}\n\n`
+		: `# ${data.title ?? slug} {#ch:${slug}}\n\n${body.trim()}\n\n`;
 }
 fs.writeFileSync(path.join(build, "thesis.md"), md);
 

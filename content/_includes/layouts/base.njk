@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>{% if title %}{{ title }} · {% endif %}{{ thesis.title }}</title>
+	<title>{% if title or part %}{{ title or part }} · {% endif %}{{ thesis.title }}</title>
 	<link rel="stylesheet" href="/assets/katex/katex.min.css">
 	<link rel="stylesheet" href="/assets/style.css">
 </head>

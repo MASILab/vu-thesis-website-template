@@ -39,6 +39,22 @@ npm install
 | `content/figures/` | Images (SVG, PNG or JPG). SVGs are converted to PDF for print automatically. |
 | `content/demos/` | JavaScript for the interactive demos |
 
+### Parts
+
+To group chapters into parts, add a small file with `part:` instead of `title:` where the part should begin. Its body is optional introduction text:
+
+```
+content/chapters/
+  01-introduction.md     title: Introduction
+  02-part-1.md           part: Point estimate models and their limits
+  03-eye-atlas.md        title: Super-resolution multi-contrast unbiased eye atlases …
+  04-fiber-mixtures.md   title: Separating mixtures of single-fiber orientation distributions …
+  05-part-2.md           part: Multi-contrast integration for reducing uncertainty
+  06-mp2rage.md          title: Comparison and calibration of MP2RAGE quantitative T1 values …
+```
+
+Parts are numbered I, II, III…, and chapters count straight through them (Chapter 1, Part I, Chapter 2, Chapter 3, Part II, Chapter 4…). A chapter is never labelled "Part I, Chapter 1". In the PDF, a part starts a new page with a "PART I" heading styled like the template's chapter headings, and it appears in the table of contents. On the website, chapters are grouped under their part in the contents list.
+
 ### Markdown syntax
 
 The same syntax works on the website and in the PDF:

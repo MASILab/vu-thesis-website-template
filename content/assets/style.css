@@ -49,3 +49,12 @@ th, td { border-bottom: 1px solid var(--rule); padding: .25rem .75rem; }
 table { counter-increment: table; }
 caption { caption-side: top; font-size: .9rem; color: var(--muted); margin-bottom: .5rem; }
 caption::before { content: "Table " counter(chapter) "." counter(table) ". "; font-weight: bold; color: var(--text); }
+
+/* Contents: parts (Part I, II, ...) group chapters, which are numbered straight through */
+.toc-list, .part-contents { list-style: none; padding: 0; }
+.toc-list li { margin: .35rem 0; }
+.toc-list .toc-part { margin-top: 1.25rem; font-weight: bold; }
+.toc-list .toc-part .toc-num::after { content: ":"; }
+.toc-list .in-part { padding-left: 1.5rem; }
+.toc-num { display: inline-block; min-width: 1.75rem; color: var(--muted); }
+.toc-part .toc-num { min-width: 0; color: inherit; }
