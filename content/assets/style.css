@@ -89,7 +89,7 @@ main h1:first-child, .content > article > h1:first-child { margin-top: 0; }
 .page-toc { background: #fff; border: 1px solid var(--rule); border-radius: 4px; box-shadow: 0 1px 1px rgba(0, 0, 0, .125); }
 .page-toc summary {
 	cursor: pointer; padding: .5rem .75rem; font-size: .75em; font-weight: bold;
-	color: var(--gold); background: var(--text); border-radius: 4px 4px 0 0;
+	color: var(--text); background: var(--gold); border-radius: 4px 4px 0 0;
 }
 .page-toc:not([open]) summary { border-radius: 4px; }
 .page-toc ul { list-style: none; margin: 0; padding: 0; font-size: .75em; }
@@ -98,7 +98,7 @@ main h1:first-child, .content > article > h1:first-child { margin-top: 0; }
 .page-toc a { display: block; padding: .25rem .75rem; color: var(--text); font-weight: bold; line-height: 1.5; text-decoration: none; border-bottom: 1px solid var(--rule); }
 .page-toc li:last-child a { border-bottom: 0; }
 .page-toc a:hover { color: var(--link); }
-.page-toc a[aria-current] { background: var(--text); color: var(--gold); }
+.page-toc a[aria-current] { background: #e0d5c0; color: var(--text); } /* Sand, lighter than the gold title band */
 
 /* Footer: full-width band, text in the centered container */
 .site-footer { flex-shrink: 0; margin-top: 3rem; background: var(--surface); color: var(--text); }
@@ -150,7 +150,7 @@ tr, td, th { vertical-align: middle; }
 .chapter-nav > :first-child { border-radius: 4px 0 0 4px; }
 .chapter-nav > :last-child { margin-left: -1px; border-radius: 0 4px 4px 0; }
 .chapter-nav a:visited { color: var(--text); }
-.chapter-nav a:hover { background: var(--text); color: var(--gold); }
+.chapter-nav a:hover { background: var(--gold); color: var(--text); }
 .chapter-nav .disabled { color: var(--muted); border-color: var(--rule); cursor: not-allowed; }
 
 @media print {
