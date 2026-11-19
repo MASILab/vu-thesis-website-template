@@ -14,7 +14,7 @@ body {
 	margin: 0; background: var(--bg); color: var(--text);
 	font: 1.125rem/1.6 "Times New Roman", Times, serif;
 }
-.site-header, main, .chapter-nav { max-width: 42rem; margin: 0 auto; padding: 0 1rem; }
+.site-header, main, .chapter-nav, .site-footer { max-width: 42rem; margin: 0 auto; padding: 0 1rem; }
 .site-header { padding-top: 1rem; font-size: .9rem; }
 a { color: var(--accent); }
 
@@ -39,9 +39,10 @@ th, td { border-bottom: 1px solid var(--rule); padding: .25rem .75rem; }
 .bibliography li { padding-left: 2em; text-indent: -2em; margin-bottom: .5rem; }
 .missing { color: crimson; }
 .chapter-nav { display: flex; justify-content: space-between; padding: 2rem 1rem; }
+.site-footer { margin-top: 3rem; padding-top: 1rem; padding-bottom: 2rem; border-top: 1px solid var(--rule); font-size: .85rem; color: var(--muted); }
 
 @media print {
-	.site-header, .chapter-nav { display: none; }
+	.site-header, .chapter-nav, .site-footer { display: none; }
 	.demo-stage { display: none; }
 }
 .chapter { counter-reset: chapter var(--chapter) h2 figure table; }

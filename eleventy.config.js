@@ -36,6 +36,7 @@ export default function (eleventyConfig) {
 
 	// ---- Shared thesis metadata (also passed to pandoc via --metadata-file) ----
 	eleventyConfig.addDataExtension("yaml", (contents) => yamlLoad(contents));
+	eleventyConfig.addGlobalData("buildYear", () => new Date().getFullYear());
 
 	// ---- Citations: pandoc-style [@key] syntax, same .bib + CSL as the print export ----
 	eleventyConfig.addPlugin(citations, {

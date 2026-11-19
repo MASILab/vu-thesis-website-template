@@ -33,7 +33,7 @@ npm install
 
 | File | Contents |
 |---|---|
-| `content/_data/thesis.yaml` | Title, name, major, date, committee, and the optional copyright, dedication and acknowledgments pages |
+| `content/_data/thesis.yaml` | Title, name, major, date, committee, the optional copyright, dedication and acknowledgments pages, and the website footer's license |
 | `content/chapters/NN-name.md` | One file per chapter, in filename order. Front matter is just `title:`, and sections start at `##`. |
 | `content/references.bib` | BibTeX library |
 | `content/figures/` | Images (SVG, PNG or JPG). SVGs are converted to PDF for print automatically. |

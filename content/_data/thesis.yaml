@@ -21,5 +21,12 @@ acknowledgments: |
   The acknowledgements page is optional. Acknowledgement of grant and contract
   support may be included on this page.
 
+# ---- Website footer ----
+# Shown as "© <copyright-year> <author>" plus the license below. Without `license`
+# the footer says "All rights reserved", matching the PDF's copyright page.
+# license:
+#   name: "CC BY 4.0"
+#   url: "https://creativecommons.org/licenses/by/4.0/"
+
 # Base URL of the published site; the PDF points readers here for interactive demos.
 site-url: "https://example.com"
