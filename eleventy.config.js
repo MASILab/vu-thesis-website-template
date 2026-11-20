@@ -64,6 +64,15 @@ export default function (eleventyConfig) {
 	eleventyConfig.addPlugin(citations, {
 		bibliography: ["content/references.bib"],
 		style: "export/apa.csl",
+		// The plugin's own template escapes the citation text a second time, so
+		// "Plewes & Kucharczyk" showed as "Plewes &#38; Kucharczyk". citeproc already
+		// returns HTML, so insert it as is. Same markup as the plugin's _citations.njk.
+		citationRender: ({ uuid, parts }) =>
+			`<span class="citations" id="citation-${uuid}">` +
+			parts.map((part) => part.citation
+				? `<a href="#bib-${part.citation.id}" class="reference${part.citation.missing ? " missing" : ""}" id="ref-bib-${part.citation.id}-${uuid}">${part.text}</a>`
+				: part).join("") +
+			`</span>`,
 	});
 
 	// ---- Markdown: KaTeX math, attributes, figures, footnotes, demo blocks ----
